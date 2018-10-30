@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "5384358639",
+    "firebase_url": "https://selfie-tournament.firebaseio.com",
+    "project_id": "selfie-tournament",
+    "storage_bucket": "selfie-tournament.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5384358639:android:8e4053af9289a1f9",
+        "android_client_info": {
+          "package_name": "com.example.hp.milkproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "5384358639-3fmosm8ch9u5bua0hajpash7jk73qun5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC-aVshtLZJXpnxP9cOJfbvEPtNLqsJWE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5384358639:android:45dfef481cb17b8a",
+        "android_client_info": {
+          "package_name": "com.jama.idairy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "5384358639-3fmosm8ch9u5bua0hajpash7jk73qun5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC-aVshtLZJXpnxP9cOJfbvEPtNLqsJWE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

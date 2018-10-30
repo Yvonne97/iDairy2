@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title></title>
+</head>
+<body>
+<div style="width: 100%;" id="graph">
+
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase-firestore.js"></script>
+
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAHF7UK-cUCP2l0OtniChJ0BeSgo1uWiuY",
+    authDomain: "wed-test-e1882.firebaseapp.com",
+    databaseURL: "https://wed-test-e1882.firebaseio.com",
+    projectId: "wed-test-e1882",
+    storageBucket: "wed-test-e1882.appspot.com",
+    messagingSenderId: "101608831443"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script>
+
+        function change(uid) {
+            var trace = {
+                x: [],
+                y: [],
+                type: 'line'
+                };
+                var data = [trace];
+                var layout = {
+                  plot_bgcolor: '#fff',
+                  paper_bgcolor: '#fff',
+                  title: "P/L Price Graph"
+                };
+                // Get graph data
+                var getData = firestoreDB.collection("Graph Data").doc(uid)
+                .collection(uid).orderBy("x", "desc");
+                getData.get().then(function (snap) {
+                  snap.forEach(function(doc) {
+                      // console.log(doc.id, " => ", doc.data());
+                      trace.x.push(doc.data().x);
+                      trace.y.push(doc.data().y);
+                      Plotly.newPlot('graph', data, layout);
+                  });
+                }).catch(function (error) {
+                  console.log(error);
+                });
+		}
+		</script>
+</body>
+</html>
