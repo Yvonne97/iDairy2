@@ -17,12 +17,6 @@
         android:hint="Date"
         android:inputType="date" />
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="7dp" />
-
     <EditText
         android:id="@+id/editTextQuantity"
         android:layout_width="match_parent"
