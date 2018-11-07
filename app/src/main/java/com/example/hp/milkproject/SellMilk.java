@@ -29,14 +29,10 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SellMilk extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class SellMilk extends AppCompatActivity {
 
     EditText editTextDate, editTextQuantity, editTextCost;
     Button buttonDone;
-    Spinner spinner;
-    ArrayList<String> stringsCategoryName;
-    String cowName;
-    ProgressDialog progressDialog;
     Calendar myCalendar;
     DatePickerDialog.OnDateSetListener dateChangedListener;
 
@@ -45,26 +41,20 @@ public class SellMilk extends AppCompatActivity implements AdapterView.OnItemSel
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sell_milk);
 
-        progressDialog = new ProgressDialog(this);
-
         editTextDate = (EditText) findViewById(R.id.editTextDate);
         editTextQuantity = (EditText) findViewById(R.id.editTextQuantity);
         editTextCost = (EditText) findViewById(R.id.editTextCost);
 
         buttonDone = (Button) findViewById(R.id.buttonDone);
-        spinner = (Spinner) findViewById(R.id.spinner);
-
-        spinner.setOnItemSelectedListener(this);
 
         buttonDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cowName.equals("Choose Cow")){
-                    Toast.makeText(SellMilk.this, "Please Choose a cow", Toast.LENGTH_SHORT).show();
+                if (editTextDate.getText().toString().equals("")){
+                    Toast.makeText(SellMilk.this, "Please fill in all details", Toast.LENGTH_SHORT).show();
                 }else {
                     Map<String, Object> map = new HashMap<>();
                     map.put("date", "date " +editTextDate.getText().toString());
-                    map.put("name", cowName);
                     map.put("quantity", "quantity "+editTextQuantity.getText().toString());
                     map.put("cost", "cost "+editTextCost.getText().toString());
                     map.put("message", "Milk was sold");
@@ -82,7 +72,6 @@ public class SellMilk extends AppCompatActivity implements AdapterView.OnItemSel
             }
         });
 
-        getCategoryNames();
         myCalendar = Calendar.getInstance();
         dateChangedListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -108,64 +97,5 @@ public class SellMilk extends AppCompatActivity implements AdapterView.OnItemSel
         String myFormat = "dd MMM yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
         editTextDate.setText(sdf.format(myCalendar.getTime()));
-    }
-    private void getCategoryNames() {
-
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        if (stringsCategoryName != null) {
-            stringsCategoryName.clear();
-        }
-
-        stringsCategoryName = new ArrayList<String>();
-        stringsCategoryName.add("Choose Cow");
-
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child("Cows").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    AddMilking.GetName getName = postSnapshot.getValue(AddMilking.GetName.class);
-                    stringsCategoryName.add(getName.getName());
-                }
-                final ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(SellMilk.this, android.R.layout.simple_spinner_item, stringsCategoryName);
-                adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner.setAdapter(adapterCategory);
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public static class GetName {
-        String name;
-
-        public GetName() {
-        }
-
-        public GetName(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
-
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        cowName = parent.getItemAtPosition(position).toString();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 }
