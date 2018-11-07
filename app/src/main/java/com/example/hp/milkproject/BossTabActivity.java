@@ -1,14 +1,11 @@
 package com.example.hp.milkproject;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -31,9 +28,6 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -156,7 +150,7 @@ public class BossTabActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
 //            LOG OUT THE USER TO LOGIN PAGE
             FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(BossTabActivity.this, LoginActicity.class);
+            Intent intent = new Intent(BossTabActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
             return true;

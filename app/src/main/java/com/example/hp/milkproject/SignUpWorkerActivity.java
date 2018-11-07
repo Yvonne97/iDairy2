@@ -2,7 +2,6 @@ package com.example.hp.milkproject;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Binder;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -67,7 +66,7 @@ public class SignUpWorkerActivity extends AppCompatActivity {
                                         Toast.makeText(SignUpWorkerActivity.this, "Unable to sigh you up", Toast.LENGTH_SHORT).show();
                                         progressDialog.dismiss();
                                     }else {
-                                        Map<String, String> map = new HashMap<>();
+                                        final Map<String, String> map = new HashMap<>();
                                         map.put("email", editTextEmail.getText().toString());
                                         map.put("sname", editTextSname.getText().toString());
                                         map.put("fname", editTextFname.getText().toString());
@@ -82,10 +81,17 @@ public class SignUpWorkerActivity extends AppCompatActivity {
                                                 .set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                progressDialog.dismiss();
-                                                Intent intent = new Intent(SignUpWorkerActivity.this, LoginActicity.class);
-                                                startActivity(intent);
-                                                finish();
+                                                FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                                                firebaseFirestore.collection("Worker").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                        .set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        progressDialog.dismiss();
+                                                        Intent intent = new Intent(SignUpWorkerActivity.this, LoginActivity.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                });
                                             }
                                         });
                                     }

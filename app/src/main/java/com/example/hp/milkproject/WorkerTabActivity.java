@@ -3,7 +3,6 @@ package com.example.hp.milkproject;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -91,7 +90,7 @@ public class WorkerTabActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(WorkerTabActivity.this, LoginActicity.class);
+            Intent intent = new Intent(WorkerTabActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
             return true;

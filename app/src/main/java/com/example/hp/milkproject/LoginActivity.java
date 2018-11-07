@@ -16,19 +16,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class LoginActicity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     EditText editTextEmail, editTextPassword;
@@ -60,7 +51,7 @@ public class LoginActicity extends AppCompatActivity {
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(LoginActicity.this);
+                final Dialog dialog = new Dialog(LoginActivity.this);
                 dialog.setContentView(R.layout.check_worker_signup_layout);
                 //dialog.setTitle("Add New Worker");
                 dialog.setCancelable(false);
@@ -80,9 +71,9 @@ public class LoginActicity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (editTextAddWorker.getText().toString().equals("")){
-                            Toast.makeText(LoginActicity.this, "Please add the email address", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Please add the email address", Toast.LENGTH_LONG).show();
                         }else {
-                            final ProgressDialog progressDialog = new ProgressDialog(LoginActicity.this);
+                            final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
                             progressDialog.setMessage("Checking if account exists");
                             progressDialog.setCancelable(false);
                             progressDialog.show();
@@ -95,19 +86,19 @@ public class LoginActicity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                             DocumentSnapshot document = task.getResult();
                                             if (!task.getResult().exists()){
-                                                Toast.makeText(LoginActicity.this, "Sorry you are not allowed to access this application, contact your employer", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(LoginActivity.this, "Sorry you are not allowed to access this application, contact your employer", Toast.LENGTH_LONG).show();
                                                 progressDialog.dismiss();
                                                 dialog.dismiss();
                                             }else {
                                                 dialog.dismiss();
-                                                Intent intent = new Intent(LoginActicity.this, SignUpWorkerActivity.class);
+                                                Intent intent = new Intent(LoginActivity.this, SignUpWorkerActivity.class);
                                                 Bundle bundle = new Bundle();
                                                 bundle.putString("email", email);
                                                 intent.putExtras(bundle);
                                                 startActivity(intent);
                                                 finish();
                                             }
-                                            //Toast.makeText(LoginActicity.this, document.getString("email"), Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(LoginActivity.this, document.getString("email"), Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         }
@@ -125,7 +116,7 @@ public class LoginActicity extends AppCompatActivity {
                 mainPassword = editTextPassword.getText().toString();
 
                 if (mainEmail.equals("") || mainPassword.equals("")){
-                    Toast.makeText(LoginActicity.this, "Please fill in all details to login", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Please fill in all details to login", Toast.LENGTH_SHORT).show();
                 }else {
                     loginUser(mainEmail, mainPassword);
                 }
@@ -142,7 +133,7 @@ public class LoginActicity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()){
                     progressDialog.dismiss();
-                    Toast.makeText(LoginActicity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
                 }else {
                     progressDialog.dismiss();
                     String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -154,17 +145,17 @@ public class LoginActicity extends AppCompatActivity {
                                     if (document.exists()){
                                         if (document.get("role").equals("Boss")){
                                             //                    LOGIN USER TO BOSS PAGE
-                                            Intent intent = new Intent(LoginActicity.this, BossTabActivity.class);
+                                            Intent intent = new Intent(LoginActivity.this, BossTabActivity.class);
                                             startActivity(intent);
                                             finish();
                                         }else {
                                             //                    LOGIN USER TO BOSS PAGE
-                                            Intent intent = new Intent(LoginActicity.this, WorkerTabActivity.class);
+                                            Intent intent = new Intent(LoginActivity.this, WorkerTabActivity.class);
                                             startActivity(intent);
                                             finish();
                                         }
                                     }else {
-                                            Toast.makeText(LoginActicity.this, "User does not exist", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(LoginActivity.this, "User does not exist", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -181,7 +172,7 @@ public class LoginActicity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            //Toast.makeText(LoginActicity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
             documentReference = firebaseFirestore.collection("Users").document(userUid)
                     .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -190,19 +181,19 @@ public class LoginActicity extends AppCompatActivity {
                             if (document.exists()){
                                 if (document.get("role").equals("Boss")){
                                     //                    LOGIN USER TO BOSS PAGE
-                                    Intent intent = new Intent(LoginActicity.this, BossTabActivity.class);
+                                    Intent intent = new Intent(LoginActivity.this, BossTabActivity.class);
                                     startActivity(intent);
                                     finish();
                                     progressDialog.dismiss();
                                 }else {
                                     //                    LOGIN USER TO WORKER PAGE
-                                    Intent intent = new Intent(LoginActicity.this, WorkerTabActivity.class);
+                                    Intent intent = new Intent(LoginActivity.this, WorkerTabActivity.class);
                                     startActivity(intent);
                                     finish();
                                     progressDialog.dismiss();
                                 }
                             }else {
-                                Toast.makeText(LoginActicity.this, "User does not exist", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "User does not exist", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

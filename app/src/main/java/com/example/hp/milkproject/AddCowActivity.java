@@ -1,11 +1,13 @@
 package com.example.hp.milkproject;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +29,8 @@ public class AddCowActivity extends AppCompatActivity {
     Button buttonDone;
     DatabaseReference databaseReference;
     ProgressDialog progressDialog;
+    Calendar myCalendar;
+    DatePickerDialog.OnDateSetListener dateChangedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,5 +90,31 @@ public class AddCowActivity extends AppCompatActivity {
                 }
             }
         });
+
+        myCalendar = Calendar.getInstance();
+        dateChangedListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, month);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                addDate();
+            }
+        };
+
+        editTextBirth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(AddCowActivity.this, dateChangedListener, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+    }
+
+    private void addDate() {
+        String myFormat = "dd MMM yyyy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+        editTextBirth.setText(sdf.format(myCalendar.getTime()));
     }
 }

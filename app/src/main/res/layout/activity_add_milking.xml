@@ -36,7 +36,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="AM"
-            android:inputType="number" />
+            android:inputType="numberDecimal" />
 
         <EditText
             android:id="@+id/editText6NO"
@@ -45,7 +45,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="NOON"
-            android:inputType="number" />
+            android:inputType="numberDecimal" />
 
         <EditText
             android:id="@+id/editText4PM"
@@ -54,7 +54,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="PM"
-            android:inputType="number" />
+            android:inputType="numberDecimal" />
     </LinearLayout>
 
     <EditText
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Total Collected"
-        android:inputType="number" />
+        android:inputType="numberDecimal" />
 
     <Button
         android:id="@+id/buttonDone"

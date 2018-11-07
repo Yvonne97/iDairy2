@@ -1,5 +1,6 @@
 package com.example.hp.milkproject;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,46 +23,41 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddFedd extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AddFedd extends AppCompatActivity {
 
-    EditText editTextDate, editTextQuantity, editTextName;
+    EditText editTextDate, editTextQuantity, editTextName, editTextCost;
     Button buttonDone;
-    Spinner spinner;
-    ArrayList<String> stringsCategoryName;
-    String cowName;
-    ProgressDialog progressDialog;
+    Calendar myCalendar;
+    DatePickerDialog.OnDateSetListener dateChangedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_fedd);
 
-        progressDialog = new ProgressDialog(this);
-
         editTextDate = (EditText) findViewById(R.id.editTextDate);
         editTextQuantity = (EditText) findViewById(R.id.editTextQuantity);
         editTextName = (EditText) findViewById(R.id.editTextName);
-
+        editTextCost = (EditText) findViewById(R.id.editTextCost);
         buttonDone = (Button) findViewById(R.id.buttonDone);
-        spinner = (Spinner) findViewById(R.id.spinner);
-
-        spinner.setOnItemSelectedListener(this);
 
         buttonDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cowName.equals("Choose Cow")){
-                    Toast.makeText(AddFedd.this, "Please Choose a cow", Toast.LENGTH_SHORT).show();
+                if (editTextDate.getText().toString().equals("")){
+                    Toast.makeText(AddFedd.this, "Please add date", Toast.LENGTH_SHORT).show();
                 }else {
                     Map<String, Object> map = new HashMap<>();
                     map.put("date", "date"+editTextDate.getText().toString());
-                    map.put("name", cowName);
                     map.put("uid", FirebaseAuth.getInstance().getUid());
                     map.put("quantity","quantity "+editTextQuantity.getText().toString());
+                    map.put("cost","cost is "+editTextCost.getText().toString());
                     map.put("feedName", "feed name "+editTextName.getText().toString());
                     map.put("message", "A new feed was added");
 
@@ -75,65 +72,31 @@ public class AddFedd extends AppCompatActivity implements AdapterView.OnItemSele
             }
         });
 
-        getCategoryNames();
-    }
-
-    private void getCategoryNames() {
-
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        if (stringsCategoryName != null) {
-            stringsCategoryName.clear();
-        }
-
-        stringsCategoryName = new ArrayList<String>();
-        stringsCategoryName.add("Choose Cow");
-
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child("Cows").addListenerForSingleValueEvent(new ValueEventListener() {
+        myCalendar = Calendar.getInstance();
+        dateChangedListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    AddMilking.GetName getName = postSnapshot.getValue(AddMilking.GetName.class);
-                    stringsCategoryName.add(getName.getName());
-                }
-                final ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(AddFedd.this, android.R.layout.simple_spinner_item, stringsCategoryName);
-                adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner.setAdapter(adapterCategory);
-                progressDialog.dismiss();
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, month);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                addDate();
             }
+        };
 
+        editTextDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            public void onClick(View v) {
+                new DatePickerDialog(AddFedd.this, dateChangedListener, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
     }
 
-    public static class GetName {
-        String name;
-
-        public GetName() {
-        }
-
-        public GetName(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
+    private void addDate() {
+        String myFormat = "dd MMM yyyy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+        editTextDate.setText(sdf.format(myCalendar.getTime()));
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        cowName = parent.getItemAtPosition(position).toString();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 }

@@ -32,10 +32,19 @@
         android:hint="Quantity"
         android:inputType="number" />
 
+    <EditText
+        android:id="@+id/editTextCost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Cost"
+        android:inputType="numberDecimal" />
+
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:layout_height="40dp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/buttonDone"
